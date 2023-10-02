@@ -16,4 +16,4 @@ EXPO_PUBLIC_APPID=""
 EXPO_PUBLIC_MEASUREMENTID=""
 ```
 
-| Note : You can create these when you create a Web App in Firebase
+> Note : You can create these when you create a Web App in Firebase

@@ -3,7 +3,6 @@
  */
 
 import {
-  User,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
 } from "firebase/auth";
@@ -13,14 +12,9 @@ import { auth } from "../config/firebase";
 
 // Function to push an alert to the user
 function PushAlert(header: string, footer: string) {
-  Alert.alert(
-    `${header}`,
-    `${footer}`,
-    [{ text: "OK", onPress: () => console.log("OK Pressed") }],
-    {
-      cancelable: true,
-    }
-  );
+  Alert.alert(`${header}`, `${footer}`, [{ text: "OK" }], {
+    cancelable: true,
+  });
 }
 
 /**
@@ -29,33 +23,26 @@ function PushAlert(header: string, footer: string) {
  * @param {string} password - The password of the user
  * @returns {User | null} - The user object or null if the user is not found
  */
-async function signIn(email: string, password: string): Promise<User | null> {
+async function signIn(email: string, password: string): Promise<void> {
   console.log("Sign In User Authentication Called");
-  await signInWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
-      // Signed in and return the user
-      return userCredential.user;
-    })
-    .catch((error) => {
-      console.error(`${error.code}: ${error.message}`);
-      if (error.code === "auth/invalid-email") {
-        PushAlert(
-          "Wrong Email or Password",
-          `${error.code} : ${error.message}`
-        );
-        return;
-      }
-      if (error.code === "auth/invalid-login-credentials") {
-        PushAlert(
-          "Wrong Email or Password",
-          `${error.code} : ${error.message}`
-        );
-        return;
-      }
-      PushAlert(error.code, error.message);
-    });
-
-  return null;
+  await signInWithEmailAndPassword(auth, email, password).catch((error) => {
+    console.error(`${error.code}: ${error.message}`);
+    if (error.code === "auth/invalid-email") {
+      PushAlert(
+        "Wrong Email or Password",
+        "The account you are trying to login does not exist"
+      );
+      return;
+    }
+    if (error.code === "auth/invalid-login-credentials") {
+      PushAlert(
+        "Wrong Email or Password",
+        "Please check your email or password and try again"
+      );
+      return;
+    }
+    PushAlert(error.code, error.message);
+  });
 }
 
 /**
@@ -64,28 +51,27 @@ async function signIn(email: string, password: string): Promise<User | null> {
  * @param {string} password - The password of the user
  * @returns {User | null} - The user object or null if the user is not found
  */
-async function signUp(email: string, password: string): Promise<User | null> {
+async function signUp(email: string, password: string): Promise<void> {
   console.log("Sign Up User Authentication Called");
-  await createUserWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
-      console.log("User created");
-      // Created user and return the user
-      return userCredential.user;
-    })
-    .catch((error) => {
-      console.error(`${error.code}: ${error.message}`);
-      if (error.code === "auth/invalid-email") {
-        PushAlert("Incorrect Email", `${error.code} : ${error.message}`);
-        return;
-      }
-      if (error.code === "auth/weak-password") {
-        PushAlert("Weak Password", `${error.code} : ${error.message}`);
-        return;
-      }
-      PushAlert(error.code, error.message);
-    });
-
-  return null;
+  await createUserWithEmailAndPassword(auth, email, password).catch((error) => {
+    console.error(`${error.code}: ${error.message}`);
+    if (error.code === "auth/invalid-email") {
+      PushAlert("Incorrect Email", "Please enter a valid email");
+      return;
+    }
+    if (error.code === "auth/weak-password") {
+      PushAlert(
+        "Weak Password",
+        "Please make sure your password contains atleast 6 characters"
+      );
+      return;
+    }
+    if (error.code === "auth/email-already-in-use") {
+      PushAlert("Email Already in Use", "Please login instead");
+      return;
+    }
+    PushAlert(error.code, error.message);
+  });
 }
 
 export { signIn, signUp };

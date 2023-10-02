@@ -14,6 +14,10 @@ const RootNagivator = () => {
   const [loading, setLoading] = useState<boolean>(true); // Not show anything until the app is ready
   const [user, setUser] = useState<User | null>(null);
 
+  function LogoutUser() {
+    setUser(null);
+  }
+
   // Handling Authentication
   useEffect(() => {
     const auth = getAuth();
@@ -23,10 +27,13 @@ const RootNagivator = () => {
     });
   }, []);
 
-  //TODO: Use splash screen
   if (loading) return null;
 
-  return user ? <SignedIn /> : <SignedOut />;
+  return user ? (
+    <SignedIn user={user} LogoutUser={LogoutUser} />
+  ) : (
+    <SignedOut />
+  );
 };
 
 export default RootNagivator;
