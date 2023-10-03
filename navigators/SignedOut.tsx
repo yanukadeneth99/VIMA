@@ -61,6 +61,8 @@ const SignedOut = () => {
                 size="lg"
                 variant="rounded"
                 placeholder="Username"
+                isRequired
+                autoCapitalize="none"
                 w="100%"
                 onChange={(e) => setUsername(e.nativeEvent.text)}
                 value={username}
@@ -70,6 +72,8 @@ const SignedOut = () => {
                 w="100%"
                 variant="rounded"
                 size="lg"
+                isRequired
+                autoCapitalize="none"
                 InputRightElement={
                   <Button
                     size="xs"

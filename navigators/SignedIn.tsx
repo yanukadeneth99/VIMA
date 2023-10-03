@@ -14,7 +14,7 @@ const SignedIn = () => {
   // console.log(user.toJSON());
 
   return (
-    <Tab.Navigator>
+    <Tab.Navigator screenOptions={{ headerShown: false }}>
       <Tab.Screen
         name="Home"
         children={() => <Dashboard />}

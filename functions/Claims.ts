@@ -17,21 +17,25 @@ import { db, auth } from "../config/firebase";
 
 /**
  * Function to create a new document in the `Claims` datastore
- * @param {string} email - The username of the user doing the action
- * @param {string} car_brand - The brand of the car
- * @param {string} car_model - The model of the car
+ * @param {string} carBrand - The brand of the car
+ * @param {string} carModel - The model of the car
+ * @param {string} licensePlate - The license Plate of the car
+ * @param {{longitude: number, latitude: number}} location - The location of the incident
  */
 async function createDoc(
-  username: string,
-  car_brand: string,
-  car_model: string
+  carBrand: string,
+  carModel: string,
+  licensePlate: string,
+  location: { longitude: number; latitude: number }
 ): Promise<void> {
   try {
     // TODO : Take in photos and Geo location and handle them
-    const docRef = await addDoc(collection(db, "claims"), {
-      username,
-      car_brand,
-      car_model,
+    const docRef = await addDoc(collection(db, "Claims"), {
+      username: auth.currentUser.email,
+      car_brand: carBrand,
+      car_model: carModel,
+      license_plate: licensePlate,
+      location,
     });
     console.log("Document written with ID: ", docRef.id);
     PushAlert("Success", "Your claim has been submitted");
