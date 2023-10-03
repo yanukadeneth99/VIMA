@@ -1,29 +1,23 @@
 import { Ionicons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { User } from "firebase/auth";
 import React from "react";
 
 import CreateClaim from "../components/CreateClaim";
 import Dashboard from "../components/Dashboard";
 import Settings from "../components/Settings";
 
-interface userProp {
-  user: User | null;
-  LogoutUser: () => void;
-}
-
-const SignedIn = ({ user, LogoutUser }: userProp) => {
+const SignedIn = () => {
   // Creating Bottom Tab Navigator
   const Tab = createBottomTabNavigator();
 
   // Logging all users
-  console.log(user.toJSON());
+  // console.log(user.toJSON());
 
   return (
     <Tab.Navigator>
       <Tab.Screen
         name="Home"
-        component={Dashboard}
+        children={() => <Dashboard />}
         options={{
           tabBarLabel: "Home",
           tabBarIcon: ({ color, size }) => (
@@ -43,7 +37,7 @@ const SignedIn = ({ user, LogoutUser }: userProp) => {
       />
       <Tab.Screen
         name="Settings"
-        children={() => <Settings LogoutUser={LogoutUser} />}
+        children={() => <Settings />}
         options={{
           tabBarLabel: "Settings",
           tabBarIcon: ({ color, size }) => (

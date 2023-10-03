@@ -1,4 +1,4 @@
-import { Button, Input, Stack } from "native-base";
+import { Button, HStack, Heading, Input, Spinner, Stack } from "native-base";
 import React, { useState } from "react";
 import { Text, View, Alert } from "react-native";
 
@@ -38,7 +38,12 @@ const SignedOut = () => {
   return (
     <View className="flex justify-center items-center h-full w-full space-y-24">
       {loading ? (
-        <Text>Loading...</Text>
+        <HStack space={2} justifyContent="center">
+          <Spinner accessibilityLabel="Loading posts" />
+          <Heading color="primary.500" fontSize="md">
+            Loading
+          </Heading>
+        </HStack>
       ) : (
         <>
           <View>
