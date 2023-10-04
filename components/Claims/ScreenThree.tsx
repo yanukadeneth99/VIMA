@@ -11,11 +11,14 @@ import Footer from "./Footer";
 import PushAlert from "../../functions/Alert";
 
 const ScreenThree = ({ route, navigation }) => {
-  const { carBrand, carModel, licensePlate } = route.params;
+  const { carBrand, carModel, licensePlate, photos } = route.params;
 
   // States
   const [location, setLocation] = useState<Location.LocationObject | null>(); // Holds the current location
   const [loading, setLoading] = useState<boolean>(true); // Not letting the user proceed until the location is captured
+  const [status, requestPermission] = Location.useForegroundPermissions();
+
+  // TODO: Fix this up like ScreenTwo
 
   // Get Location permissions
   useEffect(() => {
@@ -63,7 +66,7 @@ const ScreenThree = ({ route, navigation }) => {
       <Footer
         navigation={navigation}
         nextScreen="ScreenFour"
-        content={{ carBrand, carModel, licensePlate, location }}
+        content={{ carBrand, carModel, licensePlate, location, photos }}
         loading={loading}
       />
     </View>

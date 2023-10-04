@@ -18,6 +18,7 @@
     "@react-navigation/stack": "^6.3.18",
     "@types/react": "~18.2.14",
     "expo": "^49.0.13",
+    "expo-camera": "~13.4.4",
     "expo-location": "~16.1.0",
     "expo-status-bar": "~1.6.0",
     "firebase": "^10.4.0",
