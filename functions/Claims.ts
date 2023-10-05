@@ -3,6 +3,7 @@
  */
 
 import * as MediaLibrary from "expo-media-library";
+import * as Network from "expo-network";
 import {
   collection,
   addDoc,
@@ -11,6 +12,7 @@ import {
   QuerySnapshot,
   query,
   where,
+  disableNetwork,
 } from "firebase/firestore";
 
 import PushAlert from "./Alert";
@@ -33,7 +35,9 @@ async function createDoc(
   images: MediaLibrary.Asset[]
 ): Promise<void> {
   try {
-    // TODO : Take in photos and Geo location and handle them
+    // Check if the user is connected to the internet
+    // const networkState = await Network.getNetworkStateAsync();
+    // if (networkState.isConnected === false) await disableNetwork(db);
 
     // Upload the images
     const imageUploads = [] as string[];
@@ -52,6 +56,7 @@ async function createDoc(
       license_plate: licensePlate,
       location,
       imageUploads,
+      status: 1,
     });
 
     console.log("Document written with ID: ", docRef.id);
@@ -74,12 +79,31 @@ async function getClaims(): Promise<QuerySnapshot<DocumentData, DocumentData>> {
       docCollection,
       where("username", "==", auth.currentUser.email)
     );
-    // TODO: Getting all Collections, change later
-    return await getDocs(docCollection);
+    return await getDocs(queryCollection);
   } catch (error) {
     console.error(error.code, error.message);
     PushAlert("Error Fetching Claims", `${error.code}: ${error.message}`);
   }
 }
 
-export { createDoc, getClaims };
+/**
+ * Function to get the status when passed the status number
+ * @param {number} num - The status number
+ * @returns {string} - The status text
+ */
+function getClaimStatus(num: number): string {
+  switch (num) {
+    case 0:
+      return "To Upload";
+    case 1:
+      return "Pending";
+    case 2:
+      return "Approved";
+    case 3:
+      return "Rejected";
+    default:
+      return "Unknown";
+  }
+}
+
+export { createDoc, getClaims, getClaimStatus };

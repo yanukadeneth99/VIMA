@@ -8,7 +8,7 @@ import React, { useEffect, useState } from "react";
 import { Image, Text, View } from "react-native";
 
 import { auth } from "../config/firebase";
-import { getClaims } from "../functions/Claims";
+import { getClaims, getClaimStatus } from "../functions/Claims";
 
 const Dashboard = () => {
   const [docs, setDocs] = useState<
@@ -54,10 +54,13 @@ const Dashboard = () => {
                     key={doc.id}
                     className="flex flex-col justify-center items-center space-y-2 bg-gray-200 w-full rounded-2xl p-3"
                   >
-                    <Text>
-                      {doc.get("car_brand")} - {doc.get("car_model")} ||{" "}
-                      {doc.get("license_plate")}
-                    </Text>
+                    <View className="flex flex-row justify-around items-center w-full">
+                      <Text>
+                        {doc.get("car_brand")} - {doc.get("car_model")} ||{" "}
+                        {doc.get("license_plate")}
+                      </Text>
+                      <Text>{getClaimStatus(doc.get("status"))}</Text>
+                    </View>
                     <View className="flex flex-row justify-evenly items-center space-x-3">
                       {doc.get("imageUploads").map((uri) => {
                         return (

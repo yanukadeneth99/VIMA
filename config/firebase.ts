@@ -1,7 +1,11 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import {
+  CACHE_SIZE_UNLIMITED,
+  getFirestore,
+  memoryLocalCache,
+} from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
@@ -12,6 +16,8 @@ const firebaseConfig = {
   messagingSenderId: process.env.EXPO_PUBLIC_MESSAGINGSENDERID,
   appId: process.env.EXPO_PUBLIC_APPID,
   measurementId: process.env.EXPO_PUBLIC_MEASUREMENTID,
+  cacheSizeBytes: CACHE_SIZE_UNLIMITED,
+  localCache: memoryLocalCache(),
 };
 
 // Initialize Firebase

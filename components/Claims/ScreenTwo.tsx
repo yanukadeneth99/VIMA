@@ -11,7 +11,7 @@ import { Text, View, Image } from "react-native";
 
 import Footer from "./Footer";
 
-// TODO : Add Camera Features
+// TODO : Add Media Picker to select images
 const ScreenTwo = ({ route, navigation }) => {
   // States
   const [type, setType] = useState<CameraType>(CameraType.back); // Holds the camera type - back camera, front camera, etc

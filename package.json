@@ -4,7 +4,7 @@
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
     "start": "expo start --clear",
-    "android": "expo start --android",
+    "android": "expo start --android --clear",
     "ios": "expo start --ios",
     "web": "expo start --web",
     "lint": "eslint .",
@@ -13,6 +13,7 @@
   "dependencies": {
     "@expo/vector-icons": "^13.0.0",
     "@expo/webpack-config": "^19.0.0",
+    "@react-native-community/netinfo": "9.3.10",
     "@react-navigation/bottom-tabs": "^6.5.9",
     "@react-navigation/native": "^6.1.8",
     "@react-navigation/stack": "^6.3.18",
@@ -22,6 +23,7 @@
     "expo-image-picker": "~14.3.2",
     "expo-location": "~16.1.0",
     "expo-media-library": "~15.4.1",
+    "expo-network": "~5.4.0",
     "expo-status-bar": "~1.6.0",
     "firebase": "^10.4.0",
     "native-base": "^3.4.28",

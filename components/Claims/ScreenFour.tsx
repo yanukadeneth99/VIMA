@@ -65,6 +65,7 @@ const ScreenFour = ({ route, navigation }) => {
             );
           })}
         </View>
+        <Text>Car Brand : {carBrand}</Text>
       </View>
 
       <View className="flex basis-2/12 w-full">
