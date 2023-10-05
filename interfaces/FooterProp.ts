@@ -1,6 +1,5 @@
 import * as Location from "expo-location";
-
-import CameraObject from "./CameraImage";
+import * as MediaLibrary from "expo-media-library";
 
 interface FooterProps {
   navigation: any;
@@ -14,7 +13,7 @@ interface FooterObj {
   carModel?: string;
   licensePlate?: string;
   location?: Location.LocationObject;
-  photos?: CameraObject[];
+  photos?: MediaLibrary.Asset[];
 }
 
 export { FooterObj, FooterProps };

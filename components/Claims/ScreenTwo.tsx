@@ -3,27 +3,33 @@
  */
 
 import { Camera, CameraType } from "expo-camera";
+import * as ImagePicker from "expo-image-picker";
+import * as MediaLibrary from "expo-media-library";
 import { Button, HStack, Heading, Spinner } from "native-base";
 import { useEffect, useRef, useState } from "react";
 import { Text, View, Image } from "react-native";
 
 import Footer from "./Footer";
-import CameraObject from "../../interfaces/CameraImage";
 
 // TODO : Add Camera Features
 const ScreenTwo = ({ route, navigation }) => {
   // States
   const [type, setType] = useState<CameraType>(CameraType.back); // Holds the camera type - back camera, front camera, etc
   const [permission, requestPermission] = Camera.useCameraPermissions(); // Holds whether the app has permissions for the camera
-  const [photos, setPhotos] = useState<CameraObject[]>([]); // Holds the photos taken by the user
+  const [permissionMedia, requestPermissionMedia] =
+    MediaLibrary.usePermissions(); // Holds whether the app has permissions for the media library
+  const [photos, setPhotos] = useState<MediaLibrary.Asset[]>([]); // Holds the photos taken by the user
   const cameraRef = useRef<Camera>();
 
   // Passed Values from previous screen
   const { carBrand, carModel, licensePlate } = route.params;
 
-  // Request Camera permissions as soon as the screen loads
+  // Request Camera and Media permissions as soon as the screen loads
   useEffect(() => {
     requestPermission();
+    requestPermissionMedia();
+    ImagePicker.requestMediaLibraryPermissionsAsync();
+    ImagePicker.requestCameraPermissionsAsync();
   }, []);
 
   // Function to Toggle Camera Type
@@ -35,18 +41,19 @@ const ScreenTwo = ({ route, navigation }) => {
 
   async function takePicture() {
     const photo = await cameraRef.current.takePictureAsync();
-    setPhotos((current) => [...current, photo]);
-    console.log(photo);
+    const savedPhoto = await MediaLibrary.createAssetAsync(photo.uri);
+    setPhotos((current) => [...current, savedPhoto]);
+    console.log(savedPhoto);
   }
 
   // Handle loading
-  if (!permission) {
+  if (!permission || !permissionMedia) {
     return (
       <View className="w-full h-full flex justify-center items-center">
         <HStack space={2} justifyContent="center">
           <Spinner accessibilityLabel="Loading posts" />
           <Heading color="primary.500" fontSize="sm">
-            Loading Camera...
+            Accessing Camera and Media...
           </Heading>
         </HStack>
       </View>
@@ -56,12 +63,29 @@ const ScreenTwo = ({ route, navigation }) => {
   return (
     <View className="w-full h-full">
       {/* Handle whether permission was granted or not */}
-      {!permission.granted ? (
+      {!permission.granted || !permissionMedia.granted ? (
         <View className="w-full h-full flex justify-center items-center space-y-5">
-          <Text className="text-red-500 font-bold uppercase">
-            Permission not granted
-          </Text>
-          <Button onPress={requestPermission}>Request Permission</Button>
+          {!permission.granted && (
+            <Text className="text-red-500 font-bold uppercase">
+              Camera permissions not granted
+            </Text>
+          )}
+          {!permissionMedia.granted && (
+            <Text className="text-red-500 font-bold uppercase">
+              Media permissions not granted
+            </Text>
+          )}
+          {!permission.granted && (
+            <Button onPress={requestPermission}>
+              Request Camera Permission
+            </Button>
+          )}
+          {!permissionMedia.granted && (
+            // TODO: This isn't working, check later
+            <Button onPress={requestPermissionMedia}>
+              Request Media Permission
+            </Button>
+          )}
         </View>
       ) : (
         <>

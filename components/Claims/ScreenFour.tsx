@@ -4,14 +4,14 @@
 
 import { Button } from "native-base";
 import { useEffect, useState } from "react";
-import { Text, View } from "react-native";
+import { Text, View, Image } from "react-native";
 
 import { createDoc } from "../../functions/Claims";
 import { FooterObj } from "../../interfaces/FooterProp";
 
 const ScreenFour = ({ route, navigation }) => {
   // Get the passed information
-  const { carBrand, carModel, licensePlate, location }: FooterObj =
+  const { carBrand, carModel, licensePlate, location, photos }: FooterObj =
     route.params;
 
   // State
@@ -24,7 +24,8 @@ const ScreenFour = ({ route, navigation }) => {
         carBrand === "" ||
         carModel === "" ||
         licensePlate === "" ||
-        location == null
+        location == null ||
+        photos == null
       )
     ) {
       setAllow(true);
@@ -33,10 +34,16 @@ const ScreenFour = ({ route, navigation }) => {
 
   async function submitClaim() {
     setLoading(true);
-    await createDoc(carBrand, carModel, licensePlate, {
-      longitude: location.coords.longitude,
-      latitude: location.coords.latitude,
-    }).then(() => {
+    await createDoc(
+      carBrand,
+      carModel,
+      licensePlate,
+      {
+        longitude: location.coords.longitude,
+        latitude: location.coords.latitude,
+      },
+      photos
+    ).then(() => {
       setLoading(false);
       // TODO : Fix this. Should redirect to Home and Clear off every data on the create claims form
       // navigation.replace("Home");
@@ -51,6 +58,13 @@ const ScreenFour = ({ route, navigation }) => {
         <Text>License : {licensePlate}</Text>
         <Text>Longitude : {location.coords.longitude}</Text>
         <Text>Latitude : {location.coords.latitude}</Text>
+        <View className="flex flex-row justify-center items-center space-x-2">
+          {photos.map((photo) => {
+            return (
+              <Image source={photo} key={photo.uri} className="w-20 h-20" />
+            );
+          })}
+        </View>
       </View>
 
       <View className="flex basis-2/12 w-full">

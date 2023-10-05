@@ -5,7 +5,7 @@ import {
 } from "firebase/firestore";
 import { Button, HStack, Heading, Spinner } from "native-base";
 import React, { useEffect, useState } from "react";
-import { Text, View } from "react-native";
+import { Image, Text, View } from "react-native";
 
 import { auth } from "../config/firebase";
 import { getClaims } from "../functions/Claims";
@@ -46,10 +46,35 @@ const Dashboard = () => {
         </HStack>
       ) : (
         <>
-          <View className="flex flex-col justify-center items-center space-y-8">
+          <View className="flex flex-col justify-center items-center space-y-12 w-11/12">
             {docs.length > 1 ? (
               docs.map((doc) => {
-                return <Text key={doc.id}>{doc.get("username")}</Text>;
+                return (
+                  <View
+                    key={doc.id}
+                    className="flex flex-col justify-center items-center space-y-2 bg-gray-200 w-full rounded-2xl p-3"
+                  >
+                    <Text>
+                      {doc.get("car_brand")} - {doc.get("car_model")} ||{" "}
+                      {doc.get("license_plate")}
+                    </Text>
+                    <View className="flex flex-row justify-evenly items-center space-x-3">
+                      {doc.get("imageUploads").map((uri) => {
+                        return (
+                          <Image
+                            key={uri}
+                            source={{
+                              uri,
+                            }}
+                            className=""
+                            height={80}
+                            width={80}
+                          />
+                        );
+                      })}
+                    </View>
+                  </View>
+                );
               })
             ) : (
               <Text>No Claims made</Text>
