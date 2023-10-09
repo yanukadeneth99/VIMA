@@ -1,16 +1,21 @@
 import {
+  collection,
   DocumentData,
+  onSnapshot,
+  query,
   QueryDocumentSnapshot,
   QuerySnapshot,
+  where,
 } from "firebase/firestore";
 import { Button, HStack, Heading, Spinner } from "native-base";
 import React, { useEffect, useState } from "react";
 import { Image, Text, View } from "react-native";
 
-import { auth } from "../config/firebase";
+import { auth, db } from "../config/firebase";
 import { getClaims, getClaimStatus } from "../functions/Claims";
 
 const Dashboard = () => {
+  // States
   const [docs, setDocs] = useState<
     QueryDocumentSnapshot<DocumentData, DocumentData>[]
   >([]); // State for the documents
@@ -27,8 +32,31 @@ const Dashboard = () => {
     );
   }
 
+  // Setting up a snapshot for realtime database updates
   useEffect(() => {
-    callClaims();
+    const q = query(
+      collection(db, "Claims"),
+      where("username", "==", auth.currentUser.email)
+    );
+    const unsubscribeSnapshot = onSnapshot(
+      q,
+      { includeMetadataChanges: false },
+      (querySnapshot) => {
+        const docs: QueryDocumentSnapshot<DocumentData, DocumentData>[] = [];
+        querySnapshot.forEach((doc) => {
+          const source = doc.metadata.hasPendingWrites ? "Local" : "Server";
+          docs.push(doc);
+          console.log("Updated document: ", doc.get("car_brand"), source);
+        });
+        console.log("Called onSnapshot");
+        setDocs(docs);
+      },
+      (error) => {
+        console.log("Error getting documents: ", error);
+      }
+    );
+    // Unsubscribe when the component unmounts to prevent memory leaks
+    return () => unsubscribeSnapshot();
   }, []);
 
   return (
