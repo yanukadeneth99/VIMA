@@ -60,10 +60,10 @@ const ScreenOne = ({ navigation }) => {
       </View>
 
       <Footer
+        loading={carBrand === "" || carModel === "" || licensePlate === ""}
         navigation={navigation}
         nextScreen="ScreenTwo"
         content={{ carModel, carBrand, licensePlate }}
-        loading={false}
       />
     </View>
   );

@@ -9,7 +9,7 @@ import {
 } from "firebase/firestore";
 import { Button, HStack, Heading, Spinner } from "native-base";
 import React, { useEffect, useState } from "react";
-import { Image, Text, View } from "react-native";
+import { Image, Text, View, ScrollView } from "react-native";
 
 import { auth, db } from "../config/firebase";
 import { getClaims, getClaimStatus } from "../functions/Claims";
@@ -19,7 +19,7 @@ const Dashboard = () => {
   const [docs, setDocs] = useState<
     QueryDocumentSnapshot<DocumentData, DocumentData>[]
   >([]); // State for the documents
-  const [loading, setLoading] = useState<boolean>(false); // State for loading
+  const [loading, setLoading] = useState<boolean>(true); // State for loading
 
   // Async Function handling the call to getClaims when the page loads
   async function callClaims() {
@@ -42,6 +42,7 @@ const Dashboard = () => {
       q,
       { includeMetadataChanges: false },
       (querySnapshot) => {
+        setLoading(true);
         const docs: QueryDocumentSnapshot<DocumentData, DocumentData>[] = [];
         querySnapshot.forEach((doc) => {
           const source = doc.metadata.hasPendingWrites ? "Local" : "Server";
@@ -50,6 +51,7 @@ const Dashboard = () => {
         });
         console.log("Called onSnapshot");
         setDocs(docs);
+        setLoading(false);
       },
       (error) => {
         console.log("Error getting documents: ", error);
@@ -73,8 +75,8 @@ const Dashboard = () => {
           </Heading>
         </HStack>
       ) : (
-        <>
-          <View className="flex flex-col justify-center items-center space-y-12 w-11/12">
+        <View className="pb-12">
+          <ScrollView className="flex flex-col space-y-12 w-11/12">
             {docs.length > 1 ? (
               docs.map((doc) => {
                 return (
@@ -89,33 +91,41 @@ const Dashboard = () => {
                       </Text>
                       <Text>{getClaimStatus(doc.get("status"))}</Text>
                     </View>
-                    <View className="flex flex-row justify-evenly items-center space-x-3">
-                      {doc.get("imageUploads").map((uri) => {
-                        return (
-                          <Image
-                            key={uri}
-                            source={{
-                              uri,
-                            }}
-                            className=""
-                            height={80}
-                            width={80}
-                          />
-                        );
-                      })}
-                    </View>
+                    <ScrollView horizontal>
+                      <View className="flex flex-row justify-evenly items-center space-x-3">
+                        {doc.get("imageUploads").map((uri) => {
+                          return (
+                            <Image
+                              key={uri}
+                              source={{
+                                uri,
+                              }}
+                              className=""
+                              height={80}
+                              width={80}
+                            />
+                          );
+                        })}
+                      </View>
+                    </ScrollView>
                   </View>
                 );
               })
             ) : (
               <Text>No Claims made</Text>
             )}
-          </View>
-        </>
+          </ScrollView>
+          <Button
+            variant="outline"
+            className="mt-12"
+            isLoading={loading}
+            isLoadingText="Manual Refreshing"
+            onPress={() => callClaims()}
+          >
+            Manual Refresh
+          </Button>
+        </View>
       )}
-      <Button isLoading={loading} onPress={() => callClaims()}>
-        Refresh
-      </Button>
     </View>
   );
 };

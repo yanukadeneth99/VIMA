@@ -4,7 +4,7 @@
 
 import { Button } from "native-base";
 import { useEffect, useState } from "react";
-import { Text, View, Image } from "react-native";
+import { Text, View, Image, ScrollView } from "react-native";
 
 import { createDoc } from "../../functions/Claims";
 import { FooterObj } from "../../interfaces/FooterProp";
@@ -45,8 +45,10 @@ const ScreenFour = ({ route, navigation }) => {
       photos
     ).then(() => {
       setLoading(false);
-      // TODO : Fix this. Should redirect to Home and Clear off every data on the create claims form
-      // navigation.replace("Home");
+      navigation.reset({
+        index: 0,
+        routes: [{ name: "ScreenOne" }],
+      });
     });
   }
 
@@ -58,14 +60,13 @@ const ScreenFour = ({ route, navigation }) => {
         <Text>License : {licensePlate}</Text>
         <Text>Longitude : {location.coords.longitude}</Text>
         <Text>Latitude : {location.coords.latitude}</Text>
-        <View className="flex flex-row justify-center items-center space-x-2">
+        <ScrollView horizontal className="flex flex-row space-x-2">
           {photos.map((photo) => {
             return (
               <Image source={photo} key={photo.uri} className="w-20 h-20" />
             );
           })}
-        </View>
-        <Text>Car Brand : {carBrand}</Text>
+        </ScrollView>
       </View>
 
       <View className="flex basis-2/12 w-full">

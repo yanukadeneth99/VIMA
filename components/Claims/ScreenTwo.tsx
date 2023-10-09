@@ -7,7 +7,7 @@ import * as ImagePicker from "expo-image-picker";
 import * as MediaLibrary from "expo-media-library";
 import { Button, HStack, Heading, Spinner } from "native-base";
 import { useEffect, useRef, useState } from "react";
-import { Text, View, Image } from "react-native";
+import { Text, View, Image, ScrollView } from "react-native";
 
 import Footer from "./Footer";
 
@@ -91,24 +91,29 @@ const ScreenTwo = ({ route, navigation }) => {
         <>
           <View className="flex basis-10/12 justify-center items-center">
             <View className="p-2 w-full basis-5/6">
-              <Camera className="w-full h-full" type={type} ref={cameraRef}>
-                <Text>S</Text>
+              <Camera
+                className="w-full h-full flex flex-col justify-between items-stretch"
+                type={type}
+                ref={cameraRef}
+              >
                 <Button onPress={toggleCameraType}>Change Camera</Button>
                 <Button onPress={() => takePicture()}>Take Pic</Button>
               </Camera>
             </View>
             <View className="flex basis-1/6 w-full justify-center items-center">
-              <View className="w-full h-full bg-gray-300 flex-row justify-center items-center space-x-2">
-                {photos.map((photo) => {
-                  return (
-                    <Image
-                      key={photo.uri}
-                      className="w-20 h-20"
-                      source={photo}
-                    />
-                  );
-                })}
-              </View>
+              <ScrollView horizontal className="w-full">
+                <View className="w-full h-full bg-gray-300 flex-row justify-center items-center space-x-2">
+                  {photos.map((photo) => {
+                    return (
+                      <Image
+                        key={photo.uri}
+                        className="w-20 h-20"
+                        source={photo}
+                      />
+                    );
+                  })}
+                </View>
+              </ScrollView>
             </View>
           </View>
           <Footer
