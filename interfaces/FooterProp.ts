@@ -5,7 +5,7 @@ interface FooterProps {
   navigation: any;
   nextScreen: string;
   content: FooterObj;
-  loading: boolean;
+  loading?: boolean;
 }
 
 interface FooterObj {

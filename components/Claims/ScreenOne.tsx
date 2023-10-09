@@ -3,8 +3,8 @@
  */
 
 import { Input, Stack } from "native-base";
-import { useState } from "react";
-import { View } from "react-native";
+import { useEffect, useState } from "react";
+import { View, TextInput, StyleSheet } from "react-native";
 
 import Footer from "./Footer";
 import { auth } from "../../config/firebase";
@@ -14,7 +14,25 @@ const ScreenOne = ({ navigation }) => {
   const [carBrand, setCarBrand] = useState<string>(""); // Holding Car Brand
   const [carModel, setCarModel] = useState<string>(""); // Holding Car Model
   const [licensePlate, setLicensePlate] = useState<string>(""); // Holding License Plate number
+  const [allow, setAllow] = useState<boolean>(false); // Allows submission if the value is true
 
+  // Styles for the input buttons
+  const styles = StyleSheet.create({
+    input: {
+      height: 40,
+      margin: 12,
+      borderWidth: 1,
+      padding: 10,
+    },
+  });
+
+  useEffect(() => {
+    if (!(carBrand === "" || carModel === "" || licensePlate === "")) {
+      setAllow(true);
+    }
+  }, [carBrand, carModel, licensePlate]);
+
+  // TODO: Disable the button when the texts are null
   return (
     <View className="flex w-full h-full">
       <View className="basis-10/12 w-full flex justify-center items-center">
@@ -28,39 +46,30 @@ const ScreenOne = ({ navigation }) => {
             placeholder="Input"
             w="80%"
           />
-          <Input
-            size="lg"
-            mx="3"
-            placeholder="Car Brand"
-            w="80%"
+          <TextInput
+            style={styles.input}
+            onChangeText={setCarBrand}
             value={carBrand}
-            isRequired
-            onChange={(e) => setCarBrand(e.nativeEvent.text)}
+            placeholder="Car Brand"
           />
-          <Input
-            size="lg"
-            mx="3"
-            placeholder="Car Model"
-            w="80%"
+          <TextInput
+            style={styles.input}
+            onChangeText={setCarModel}
             value={carModel}
-            isRequired
-            onChange={(e) => setCarModel(e.nativeEvent.text)}
+            placeholder="Car Brand"
           />
-          <Input
-            size="lg"
-            mx="3"
-            placeholder="License Plate"
-            w="80%"
+          <TextInput
+            style={styles.input}
+            onChangeText={setLicensePlate}
             value={licensePlate}
-            isRequired
+            placeholder="License Plate"
             autoCapitalize="characters"
-            onChange={(e) => setLicensePlate(e.nativeEvent.text)}
           />
         </Stack>
       </View>
 
       <Footer
-        loading={carBrand === "" || carModel === "" || licensePlate === ""}
+        loading={!allow}
         navigation={navigation}
         nextScreen="ScreenTwo"
         content={{ carModel, carBrand, licensePlate }}
