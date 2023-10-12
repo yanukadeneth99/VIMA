@@ -8,6 +8,7 @@ import RootNagivator from "./navigators";
 import { Text } from "react-native";
 
 // TODO: Write down the API keys on eas.json and configure proper private keys
+// TODO: Add animations using React native reanimated
 
 export default function App() {
   // Handles Network Change
@@ -26,7 +27,11 @@ export default function App() {
     <SafeAreaView className=" h-full w-full bg-gray-100">
       <NavigationContainer>
         {/* TODO: Add an Absolute Badge when network is disconnected */}
-        {!network && <Text className="absolute z-50">No Internet</Text>}
+        {!network && (
+          <Text className="absolute z-50 mt-12 bg-red-500/80 font-bold p-2">
+            No Internet
+          </Text>
+        )}
         <RootNagivator />
       </NavigationContainer>
     </SafeAreaView>

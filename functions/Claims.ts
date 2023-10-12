@@ -3,7 +3,6 @@
  */
 
 import * as MediaLibrary from "expo-media-library";
-import * as Network from "expo-network";
 import {
   collection,
   addDoc,
@@ -12,7 +11,6 @@ import {
   QuerySnapshot,
   query,
   where,
-  disableNetwork,
 } from "firebase/firestore";
 
 import PushAlert from "./Alert";
@@ -73,7 +71,7 @@ async function createDoc(
  */
 async function getClaims(): Promise<QuerySnapshot<DocumentData, DocumentData>> {
   try {
-    console.log(auth.currentUser.email);
+    console.log("Getting Claims for: ", auth.currentUser.email);
     const docCollection = collection(db, "Claims");
     const queryCollection = query(
       docCollection,
