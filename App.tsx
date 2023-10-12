@@ -1,11 +1,13 @@
-import "react-native-gesture-handler";
 import NetInfo from "@react-native-community/netinfo";
 import { NavigationContainer } from "@react-navigation/native";
-import { NativeBaseProvider, Badge } from "native-base";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { registerRootComponent } from "expo";
 
 import RootNagivator from "./navigators";
+import { Text } from "react-native";
+
+// TODO: Write down the API keys on eas.json and configure proper private keys
 
 export default function App() {
   // Handles Network Change
@@ -23,16 +25,12 @@ export default function App() {
   return (
     <SafeAreaView className=" h-full w-full bg-gray-100">
       <NavigationContainer>
-        <NativeBaseProvider>
-          {/* Adds an Absolute Badge when network is disconnected */}
-          {!network && (
-            <Badge className="absolute z-50" colorScheme="danger">
-              No Internet
-            </Badge>
-          )}
-          <RootNagivator />
-        </NativeBaseProvider>
+        {/* TODO: Add an Absolute Badge when network is disconnected */}
+        {!network && <Text className="absolute z-50">No Internet</Text>}
+        <RootNagivator />
       </NavigationContainer>
     </SafeAreaView>
   );
 }
+
+registerRootComponent(App);

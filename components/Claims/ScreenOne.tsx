@@ -32,7 +32,6 @@ const ScreenOne = ({ navigation }) => {
     }
   }, [carBrand, carModel, licensePlate]);
 
-  // TODO: Disable the button when the texts are null
   return (
     <View className="flex w-full h-full">
       <View className="basis-10/12 w-full flex justify-center items-center">

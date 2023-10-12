@@ -76,6 +76,7 @@ const Dashboard = () => {
         </HStack>
       ) : (
         <View className="pb-12">
+          {/* TODO: Create a claim component which handles everything internally including loading for images */}
           <ScrollView className="flex flex-col space-y-12 w-11/12">
             {docs.length > 1 ? (
               docs.map((doc) => {

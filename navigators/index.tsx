@@ -6,7 +6,7 @@ logged in or not
 import { User, onAuthStateChanged } from "firebase/auth";
 import React, { useEffect, useState } from "react";
 
-import SignedIn from "./SignedIn";
+// import SignedIn from "./SignedIn";
 import SignedOut from "./SignedOut";
 import { auth } from "../config/firebase";
 
@@ -25,7 +25,7 @@ const RootNagivator = () => {
 
   if (loading) return null;
 
-  return user ? <SignedIn /> : <SignedOut />;
+  return user ? <SignedOut /> : <SignedOut />;
 };
 
 export default RootNagivator;
