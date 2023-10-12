@@ -85,6 +85,29 @@ async function getClaims(): Promise<QuerySnapshot<DocumentData, DocumentData>> {
 }
 
 /**
+ * Function to retreive the number of pending documents in the `Claims` datastore
+ * @returns {QuerySnapshot<DocumentData, DocumentData>} - The query snapshot of the `Claims` datastore
+ */
+async function getNumPendingClaims(): Promise<number> {
+  try {
+    console.log(
+      "Getting Number of Pending Claims for: ",
+      auth.currentUser.email
+    );
+    const docCollection = collection(db, "Claims");
+    const queryCollection = query(
+      docCollection,
+      where("username", "==", auth.currentUser.email),
+      where("status", "==", 1)
+    );
+    return (await getDocs(queryCollection)).size;
+  } catch (error) {
+    console.error(error.code, error.message);
+    PushAlert("Error Fetching Claims", `${error.code}: ${error.message}`);
+  }
+}
+
+/**
  * Function to get the status when passed the status number
  * @param {number} num - The status number
  * @returns {string} - The status text
@@ -104,4 +127,4 @@ function getClaimStatus(num: number): string {
   }
 }
 
-export { createDoc, getClaims, getClaimStatus };
+export { createDoc, getClaims, getClaimStatus, getNumPendingClaims };
