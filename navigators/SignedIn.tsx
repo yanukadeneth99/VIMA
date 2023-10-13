@@ -12,6 +12,15 @@ import { getNumPendingClaims } from "../functions/Claims";
 import CreateClaim from "../components/CreateClaim";
 import Dashboard from "../components/Dashboard";
 import Settings from "../components/Settings";
+import {
+  DocumentData,
+  QueryDocumentSnapshot,
+  collection,
+  onSnapshot,
+  query,
+  where,
+} from "firebase/firestore";
+import { auth, db } from "../config/firebase";
 
 const SignedIn = () => {
   // State
@@ -33,6 +42,32 @@ const SignedIn = () => {
   // Creating Bottom Tab Navigator
   const Tab = createBottomTabNavigator();
 
+  // Setting up a snapshot for realtime database updates
+  // TODO: Update this and think about what I want to show for badges
+  useEffect(() => {
+    const q = query(
+      collection(db, "Claims"),
+      where("username", "==", auth.currentUser.email),
+      where("status", "==", 1)
+    );
+    const unsubscribeSnapshot = onSnapshot(
+      q,
+      { includeMetadataChanges: false },
+      (querySnapshot) => {
+        const docs: QueryDocumentSnapshot<DocumentData, DocumentData>[] = [];
+        querySnapshot.forEach((doc) => {
+          docs.push(doc);
+        });
+        setNumPendingClaims(docs.length);
+      },
+      (error) => {
+        console.log("Error getting pending documents: ", error);
+      }
+    );
+    // Unsubscribe when the component unmounts to prevent memory leaks
+    return () => unsubscribeSnapshot();
+  }, []);
+
   return (
     <Tab.Navigator
       screenOptions={{ headerShown: false, tabBarHideOnKeyboard: true }}
@@ -51,7 +86,7 @@ const SignedIn = () => {
       />
 
       {/* Create Claims */}
-      {/* <Tab.Screen
+      <Tab.Screen
         name="Create"
         component={CreateClaim}
         options={{
@@ -60,10 +95,10 @@ const SignedIn = () => {
             <Ionicons name="add-circle-outline" color={color} size={size} />
           ),
         }}
-      /> */}
+      />
 
       {/* Settings */}
-      {/* <Tab.Screen
+      <Tab.Screen
         name="Settings"
         component={Settings}
         options={{
@@ -72,7 +107,7 @@ const SignedIn = () => {
             <Ionicons name="settings" color={color} size={size} />
           ),
         }}
-      /> */}
+      />
     </Tab.Navigator>
   );
 };

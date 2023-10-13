@@ -67,7 +67,7 @@ async function createDoc(
 
 /**
  * Function to retreive all the documents in the `Claims` datastore
- * @returns {QuerySnapshot<DocumentData, DocumentData>} - The query snapshot of the `Claims` datastore
+ * @returns {Promise<QuerySnapshot<DocumentData, DocumentData>>} - The query snapshot of the `Claims` datastore
  */
 async function getClaims(): Promise<QuerySnapshot<DocumentData, DocumentData>> {
   try {
@@ -86,7 +86,7 @@ async function getClaims(): Promise<QuerySnapshot<DocumentData, DocumentData>> {
 
 /**
  * Function to retreive the number of pending documents in the `Claims` datastore
- * @returns {QuerySnapshot<DocumentData, DocumentData>} - The query snapshot of the `Claims` datastore
+ * @returns {Promise<number>} - The query snapshot of the `Claims` datastore
  */
 async function getNumPendingClaims(): Promise<number> {
   try {

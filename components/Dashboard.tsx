@@ -1,3 +1,7 @@
+/*
+ * This is the main page the user sees when logged in. Dashboard contains all the claims and show what state they are
+ */
+
 import {
   collection,
   DocumentData,
@@ -93,11 +97,13 @@ const Dashboard = () => {
                       className="flex flex-col justify-center items-center space-y-2 bg-blue-500/30 w-full rounded-2xl p-3 shadow-md"
                     >
                       <View className="flex flex-row justify-around items-center w-full">
-                        <Text>
+                        <Text className="text-gray-800">
                           {doc.get("car_brand")} - {doc.get("car_model")} ||{" "}
                           {doc.get("license_plate")}
                         </Text>
-                        <Text>{getClaimStatus(doc.get("status"))}</Text>
+                        <Text className="uppercase text-blue-700 font-bold">
+                          {getClaimStatus(doc.get("status"))}
+                        </Text>
                       </View>
                       <ScrollView horizontal>
                         <View className="flex flex-row justify-evenly items-center space-x-3">
