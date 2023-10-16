@@ -36,7 +36,7 @@ const ScreenOne = ({ navigation }) => {
           className="border-2 border-blue-500/40 w-full p-1 px-3 rounded-md"
           onChangeText={setCarModel}
           value={carModel}
-          placeholder="Car Brand"
+          placeholder="Car Model"
         />
         <TextInput
           className="border-2 border-blue-500/40 w-full p-1 px-3 rounded-md"

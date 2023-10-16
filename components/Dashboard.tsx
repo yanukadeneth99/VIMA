@@ -5,7 +5,9 @@
 import {
   collection,
   DocumentData,
+  limit,
   onSnapshot,
+  orderBy,
   query,
   QueryDocumentSnapshot,
   QuerySnapshot,
@@ -41,7 +43,8 @@ const Dashboard = () => {
   useEffect(() => {
     const q = query(
       collection(db, "Claims"),
-      where("username", "==", auth.currentUser.email)
+      where("username", "==", auth.currentUser.email),
+      orderBy("createdAt", "desc")
     );
     const unsubscribeSnapshot = onSnapshot(
       q,
@@ -122,11 +125,14 @@ const Dashboard = () => {
                           })}
                         </View>
                       </ScrollView>
+                      <Text>{doc.get("createdAt").toDate().toString()}</Text>
                     </View>
                   );
                 })
               ) : (
-                <Text>No Claims made</Text>
+                <Text className="text-gray-600 font-bold uppercase">
+                  No Claims made
+                </Text>
               )}
             </ScrollView>
           </View>

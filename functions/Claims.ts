@@ -11,6 +11,9 @@ import {
   QuerySnapshot,
   query,
   where,
+  Timestamp,
+  orderBy,
+  limit,
 } from "firebase/firestore";
 
 import PushAlert from "./Alert";
@@ -55,6 +58,8 @@ async function createDoc(
       location,
       imageUploads,
       status: 1,
+      createdAt: Timestamp.now(),
+      updatedAt: Timestamp.now(),
     });
 
     console.log("Document written with ID: ", docRef.id);
@@ -75,8 +80,10 @@ async function getClaims(): Promise<QuerySnapshot<DocumentData, DocumentData>> {
     const docCollection = collection(db, "Claims");
     const queryCollection = query(
       docCollection,
-      where("username", "==", auth.currentUser.email)
+      where("username", "==", auth.currentUser.email),
+      orderBy("createdAt", "desc")
     );
+    //! Make sure to update the `onSnapShot` in Dashboard as that's what's being used to update the UI
     return await getDocs(queryCollection);
   } catch (error) {
     console.error(error.code, error.message);
