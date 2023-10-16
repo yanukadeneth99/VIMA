@@ -11,9 +11,7 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
       "infoPlist": {
@@ -39,7 +37,8 @@
       "package": "com.yanukadeneth99.vima"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/favicon.png",
+      "bundler": "metro"
     },
     "plugins": [
       [
@@ -67,11 +66,12 @@
         {
           "photosPermission": "The app accesses your photos to let you share them with your friends."
         }
-      ]
+      ],
+      "expo-router"
     ],
     "extra": {
       "eas": {
-        "projectId": "dd9bfd2c-b6af-4ec9-a58a-3f1de030a0fa"
+        "projectId": "68df4935-748e-4f3f-b0f5-3dff54ebee95"
       }
     },
     "owner": "yanukadeneth99"

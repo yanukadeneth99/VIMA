@@ -1,15 +1,22 @@
+/*
+ * This is the main page the user sees when logged in. Dashboard contains all the claims and show what state they are
+ */
+
 import {
   collection,
   DocumentData,
+  limit,
   onSnapshot,
+  orderBy,
   query,
   QueryDocumentSnapshot,
   QuerySnapshot,
   where,
 } from "firebase/firestore";
-import { Button, HStack, Heading, Spinner } from "native-base";
 import React, { useEffect, useState } from "react";
-import { Image, Text, View, ScrollView } from "react-native";
+import { Text, View, ScrollView, Pressable } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { Image } from "expo-image";
 
 import { auth, db } from "../config/firebase";
 import { getClaims, getClaimStatus } from "../functions/Claims";
@@ -36,7 +43,8 @@ const Dashboard = () => {
   useEffect(() => {
     const q = query(
       collection(db, "Claims"),
-      where("username", "==", auth.currentUser.email)
+      where("username", "==", auth.currentUser.email),
+      orderBy("createdAt", "desc")
     );
     const unsubscribeSnapshot = onSnapshot(
       q,
@@ -62,69 +70,84 @@ const Dashboard = () => {
   }, []);
 
   return (
-    <View className="p-5 flex justify-between items-center space-y-12 w-full h-full">
-      <View>
+    <View className="flex justify-between items-center w-full h-full">
+      {/* Header */}
+      <View className="w-full flex basis-1/12 justify-center items-center">
         <Text className="font-bold text-xl text-center">Welcome!</Text>
         <Text>{auth.currentUser.email}</Text>
       </View>
       {loading ? (
-        <HStack space={2} justifyContent="center">
-          <Spinner accessibilityLabel="Loading posts" />
-          <Heading color="primary.500" fontSize="sm">
-            Loading Claims...
-          </Heading>
-        </HStack>
-      ) : (
-        <View className="pb-12">
-          <ScrollView className="flex flex-col space-y-12 w-11/12">
-            {docs.length > 1 ? (
-              docs.map((doc) => {
-                return (
-                  <View
-                    key={doc.id}
-                    className="flex flex-col justify-center items-center space-y-2 bg-gray-200 w-full rounded-2xl p-3"
-                  >
-                    <View className="flex flex-row justify-around items-center w-full">
-                      <Text>
-                        {doc.get("car_brand")} - {doc.get("car_model")} ||{" "}
-                        {doc.get("license_plate")}
-                      </Text>
-                      <Text>{getClaimStatus(doc.get("status"))}</Text>
-                    </View>
-                    <ScrollView horizontal>
-                      <View className="flex flex-row justify-evenly items-center space-x-3">
-                        {doc.get("imageUploads").map((uri) => {
-                          return (
-                            <Image
-                              key={uri}
-                              source={{
-                                uri,
-                              }}
-                              className=""
-                              height={80}
-                              width={80}
-                            />
-                          );
-                        })}
-                      </View>
-                    </ScrollView>
-                  </View>
-                );
-              })
-            ) : (
-              <Text>No Claims made</Text>
-            )}
-          </ScrollView>
-          <Button
-            variant="outline"
-            className="mt-12"
-            isLoading={loading}
-            isLoadingText="Manual Refreshing"
-            onPress={() => callClaims()}
-          >
-            Manual Refresh
-          </Button>
+        <View className="flex justify-center items-center w-full basis-10/12">
+          <Text className="text-center font-bold text-gray-800">
+            Loading...
+          </Text>
         </View>
+      ) : (
+        <>
+          {/* Body */}
+          <View className="pb-12 basis-10/12 p-5">
+            {/* TODO: Create a claim component which handles everything internally including loading for images */}
+            <ScrollView
+              className="flex flex-col space-y-2 w-11/12"
+              showsVerticalScrollIndicator={false}
+              showsHorizontalScrollIndicator={false}
+            >
+              {docs.length > 1 ? (
+                docs.map((doc) => {
+                  return (
+                    <View
+                      key={doc.id}
+                      className="flex flex-col justify-center items-center space-y-2 bg-blue-500/30 w-full rounded-2xl p-3 shadow-md"
+                    >
+                      <View className="flex flex-row justify-around items-center w-full">
+                        <Text className="text-gray-800">
+                          {doc.get("car_brand")} - {doc.get("car_model")} ||{" "}
+                          {doc.get("license_plate")}
+                        </Text>
+                        <Text className="uppercase text-blue-700 font-bold">
+                          {getClaimStatus(doc.get("status"))}
+                        </Text>
+                      </View>
+                      <ScrollView horizontal>
+                        <View className="flex flex-row justify-evenly items-center space-x-3">
+                          {/* TODO: Set placeholder to image & Move this to a component */}
+                          {doc.get("imageUploads").map((uri) => {
+                            return (
+                              <Image
+                                key={uri}
+                                source={{
+                                  uri,
+                                }}
+                                className="w-52 h-52"
+                                transition={1000}
+                              />
+                            );
+                          })}
+                        </View>
+                      </ScrollView>
+                      <Text>{doc.get("createdAt").toDate().toString()}</Text>
+                    </View>
+                  );
+                })
+              ) : (
+                <Text className="text-gray-600 font-bold uppercase">
+                  No Claims made
+                </Text>
+              )}
+            </ScrollView>
+          </View>
+          <View className="basis-1/12 w-full px-5 flex justify-center items-end">
+            <Pressable
+              className="p-2 border-2 bg-blue-100/20 border-blue-500/70 rounded-md shadow-md"
+              disabled={loading}
+              onPress={() => callClaims()}
+            >
+              <Text className="text-center text-gray-700">
+                <Ionicons name="refresh" size={20} color="black" />
+              </Text>
+            </Pressable>
+          </View>
+        </>
       )}
     </View>
   );

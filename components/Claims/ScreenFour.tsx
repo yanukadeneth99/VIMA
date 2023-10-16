@@ -2,9 +2,8 @@
  * Screen 4 - Handling Submission
  */
 
-import { Button } from "native-base";
 import { useEffect, useState } from "react";
-import { Text, View, Image, ScrollView } from "react-native";
+import { Text, View, Image, ScrollView, Pressable } from "react-native";
 
 import { createDoc } from "../../functions/Claims";
 import { FooterObj } from "../../interfaces/FooterProp";
@@ -18,6 +17,7 @@ const ScreenFour = ({ route, navigation }) => {
   const [loading, setLoading] = useState<boolean>(false); // Holds the loading state
   const [allow, setAllow] = useState<boolean>(false); // Allows submission if the value is true
 
+  // Handling Submission Button Disabling if one of the fields are null
   useEffect(() => {
     if (
       !(
@@ -29,9 +29,12 @@ const ScreenFour = ({ route, navigation }) => {
       )
     ) {
       setAllow(true);
+    } else {
+      setAllow(false);
     }
   }, []);
 
+  // Submitting the claim and resetting the UI Stack
   async function submitClaim() {
     setLoading(true);
     await createDoc(
@@ -54,39 +57,64 @@ const ScreenFour = ({ route, navigation }) => {
 
   return (
     <View className="flex w-full h-full">
-      <View className="flex basis-10/12 justify-center items-center space-y-12">
-        <Text>Car Brand : {carBrand}</Text>
-        <Text>Car Model : {carModel}</Text>
-        <Text>License : {licensePlate}</Text>
-        <Text>Longitude : {location.coords.longitude}</Text>
-        <Text>Latitude : {location.coords.latitude}</Text>
-        <ScrollView horizontal className="flex flex-row space-x-2">
-          {photos.map((photo) => {
-            return (
-              <Image source={photo} key={photo.uri} className="w-20 h-20" />
-            );
-          })}
-        </ScrollView>
+      {/* Top Segment */}
+      <View className="flex flex-col basis-10/12 justify-center items-center space-y-5">
+        <Text className="font-bold text-center text-gray-800 uppercase">
+          Car Brand : {carBrand}
+        </Text>
+        <Text className="font-bold text-center text-gray-800 uppercase">
+          Car Model : {carModel}
+        </Text>
+        <Text className="font-bold text-center text-gray-800 uppercase">
+          License : {licensePlate}
+        </Text>
+        <Text className="font-bold text-center text-gray-800 uppercase">
+          Longitude : {location.coords.longitude}
+        </Text>
+        <Text className="font-bold text-center text-gray-800 uppercase">
+          Latitude : {location.coords.latitude}
+        </Text>
+        <View className="h-1/4 w-full p-3 flex justify-center items-center">
+          <ScrollView
+            horizontal
+            showsVerticalScrollIndicator={false}
+            showsHorizontalScrollIndicator={false}
+            className="flex flex-row space-x-2"
+          >
+            {photos.map((photo) => {
+              return (
+                <Image source={photo} key={photo.uri} className="w-20 h-20" />
+              );
+            })}
+          </ScrollView>
+        </View>
       </View>
 
-      <View className="flex basis-2/12 w-full">
-        <View className="flex flex-row justify-evenly items-center">
-          <Button
-            isLoading={loading}
-            colorScheme="secondary"
-            onPress={() => navigation.goBack()}
-          >
-            Back
-          </Button>
-          <Button
-            isDisabled={!allow}
-            isLoading={loading}
-            isLoadingText="Submitting"
-            onPress={() => submitClaim()}
-          >
-            Submit
-          </Button>
-        </View>
+      {/* Footer Buttons */}
+      <View className="flex flex-row basis-2/12 w-full justify-evenly items-center">
+        {/* Back Button */}
+        <Pressable
+          disabled={loading}
+          className={`p-3 px-5 rounded shadow ${
+            !allow || loading ? "bg-gray-300" : "bg-blue-500"
+          }`}
+          onPress={() => navigation.goBack()}
+        >
+          <Text className="text-white uppercase font-bold">Back</Text>
+        </Pressable>
+
+        {/* Submit Button */}
+        <Pressable
+          className={`p-3 px-5 rounded shadow ${
+            !allow || loading ? "bg-gray-300" : "bg-red-500"
+          }`}
+          disabled={!allow || loading}
+          onPress={() => submitClaim()}
+        >
+          <Text className="font-bold text-white text-center uppercase">
+            {loading ? "Submitting..." : "Submit"}
+          </Text>
+        </Pressable>
       </View>
     </View>
   );

@@ -3,7 +3,6 @@
  */
 
 import * as MediaLibrary from "expo-media-library";
-import * as Network from "expo-network";
 import {
   collection,
   addDoc,
@@ -12,7 +11,9 @@ import {
   QuerySnapshot,
   query,
   where,
-  disableNetwork,
+  Timestamp,
+  orderBy,
+  limit,
 } from "firebase/firestore";
 
 import PushAlert from "./Alert";
@@ -57,6 +58,8 @@ async function createDoc(
       location,
       imageUploads,
       status: 1,
+      createdAt: Timestamp.now(),
+      updatedAt: Timestamp.now(),
     });
 
     console.log("Document written with ID: ", docRef.id);
@@ -69,17 +72,42 @@ async function createDoc(
 
 /**
  * Function to retreive all the documents in the `Claims` datastore
- * @returns {QuerySnapshot<DocumentData, DocumentData>} - The query snapshot of the `Claims` datastore
+ * @returns {Promise<QuerySnapshot<DocumentData, DocumentData>>} - The query snapshot of the `Claims` datastore
  */
 async function getClaims(): Promise<QuerySnapshot<DocumentData, DocumentData>> {
   try {
-    console.log(auth.currentUser.email);
+    console.log("Getting Claims for: ", auth.currentUser.email);
     const docCollection = collection(db, "Claims");
     const queryCollection = query(
       docCollection,
-      where("username", "==", auth.currentUser.email)
+      where("username", "==", auth.currentUser.email),
+      orderBy("createdAt", "desc")
     );
+    //! Make sure to update the `onSnapShot` in Dashboard as that's what's being used to update the UI
     return await getDocs(queryCollection);
+  } catch (error) {
+    console.error(error.code, error.message);
+    PushAlert("Error Fetching Claims", `${error.code}: ${error.message}`);
+  }
+}
+
+/**
+ * Function to retreive the number of pending documents in the `Claims` datastore
+ * @returns {Promise<number>} - The query snapshot of the `Claims` datastore
+ */
+async function getNumPendingClaims(): Promise<number> {
+  try {
+    console.log(
+      "Getting Number of Pending Claims for: ",
+      auth.currentUser.email
+    );
+    const docCollection = collection(db, "Claims");
+    const queryCollection = query(
+      docCollection,
+      where("username", "==", auth.currentUser.email),
+      where("status", "==", 1)
+    );
+    return (await getDocs(queryCollection)).size;
   } catch (error) {
     console.error(error.code, error.message);
     PushAlert("Error Fetching Claims", `${error.code}: ${error.message}`);
@@ -106,4 +134,4 @@ function getClaimStatus(num: number): string {
   }
 }
 
-export { createDoc, getClaims, getClaimStatus };
+export { createDoc, getClaims, getClaimStatus, getNumPendingClaims };

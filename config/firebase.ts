@@ -17,6 +17,7 @@ const firebaseConfig = {
   appId: process.env.EXPO_PUBLIC_APPID,
   measurementId: process.env.EXPO_PUBLIC_MEASUREMENTID,
   cacheSizeBytes: CACHE_SIZE_UNLIMITED,
+  databaseURL: process.env.EXPO_PUBLIC_DATABASEURL,
   localCache: memoryLocalCache(),
 };
 

@@ -1,10 +1,10 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import React from "react";
 
-import ScreenFour from "./Claims/ScreenFour";
 import ScreenOne from "./Claims/ScreenOne";
-import ScreenThree from "./Claims/ScreenThree";
 import ScreenTwo from "./Claims/ScreenTwo";
+import ScreenThree from "./Claims/ScreenThree";
+import ScreenFour from "./Claims/ScreenFour";
 
 const Stack = createStackNavigator();
 
