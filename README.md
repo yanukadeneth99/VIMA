@@ -22,7 +22,7 @@ This application is still under development. As of yet, no Production ready vers
 
 ## Development Information
 
-This application uses Expo (React Native) and Firebase. This application is open-source following the license mentioned in this repository. Feel free to create issues or suggest fixes or features to make this appication better!
+This application uses Expo (React Native) and Firebase. This application is open-source following the license mentioned in this repository. Feel free to create issues or suggest fixes or features to make this appication better - check out the [Contributing Guidelines!(./CONTRIBUTING.md)
 
 ### Getting Started
 
