@@ -1,6 +1,8 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
+import { getPerformance } from "firebase/performance";
+import { getAnalytics } from "firebase/analytics";
 import {
   CACHE_SIZE_UNLIMITED,
   getFirestore,
@@ -33,4 +35,10 @@ const db = getFirestore(app);
 // Initialize Cloud Storage and get a reference to the service
 const storage = getStorage(app);
 
-export { auth, db, storage };
+// Firebase performance
+const perf = getPerformance(app);
+
+// Initialize Analytics and get a reference to the service
+const analytics = getAnalytics(app);
+
+export { auth, db, storage, perf, analytics };
