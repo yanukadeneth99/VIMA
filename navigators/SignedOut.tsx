@@ -52,7 +52,7 @@ const SignedOut = () => {
             </Text>
           </View>
 
-          <View className="flex w-full basis-8/12 justify-center space-y-16 items-center">
+          <View className="flex w-full basis-8/12 justify-center space-y-10 items-center">
             {/* Username Field */}
             <TextInput
               editable
