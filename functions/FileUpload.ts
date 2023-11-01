@@ -17,6 +17,7 @@ async function uploadImage(uri: string): Promise<string> {
     console.log("Called uploadImage : ", uri);
 
     // Create a Reference to Image
+    // TODO: Fix this for iOS
     const imageRef = ref(storage, uri.split("/DCIM/")[1]);
 
     const blob: Blob = await new Promise((resolve, reject) => {

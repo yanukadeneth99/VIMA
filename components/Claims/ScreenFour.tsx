@@ -37,7 +37,7 @@ const ScreenFour = ({ route, navigation }) => {
   // Submitting the claim and resetting the UI Stack
   async function submitClaim() {
     setLoading(true);
-    await createDoc(
+    const result = await createDoc(
       carBrand,
       carModel,
       licensePlate,
@@ -46,13 +46,16 @@ const ScreenFour = ({ route, navigation }) => {
         latitude: location.coords.latitude,
       },
       photos
-    ).then(() => {
+    );
+    if (result) {
       setLoading(false);
       navigation.reset({
         index: 0,
         routes: [{ name: "ScreenOne" }],
       });
-    });
+    } else {
+      setLoading(false);
+    }
   }
 
   return (

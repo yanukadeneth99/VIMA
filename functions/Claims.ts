@@ -13,10 +13,10 @@ import {
   where,
   Timestamp,
   orderBy,
-  limit,
 } from "firebase/firestore";
 
 import PushAlert from "./Alert";
+import * as Network from "expo-network";
 import { uploadImage } from "./FileUpload";
 import { db, auth } from "../config/firebase";
 
@@ -34,11 +34,15 @@ async function createDoc(
   licensePlate: string,
   location: { longitude: number; latitude: number },
   images: MediaLibrary.Asset[]
-): Promise<void> {
+): Promise<boolean> {
   try {
-    // Check if the user is connected to the internet
-    // const networkState = await Network.getNetworkStateAsync();
-    // if (networkState.isConnected === false) await disableNetwork(db);
+    // Check if the user is connected to the internet and throw an error if there is no internet
+    const networkState = await Network.getNetworkStateAsync();
+    if (networkState.isConnected === false) {
+      console.error("Internet is not connected");
+      PushAlert("ERROR", "No Internet Connection");
+      return false;
+    }
 
     // Upload the images
     const imageUploads = [] as string[];
@@ -64,9 +68,11 @@ async function createDoc(
 
     console.log("Document written with ID: ", docRef.id);
     PushAlert("Success", "Your claim has been submitted");
+    return true;
   } catch (error) {
     console.error("Error adding document: ", error);
     PushAlert("Error", `${error.code}: ${error.message}`);
+    return false;
   }
 }
 
