@@ -22,7 +22,9 @@ This application is still under development. As of yet, no Production ready vers
 
 ## Development Information
 
-This application uses Expo (React Native) and Firebase. This application is open-source following the license mentioned in this repository. Feel free to create issues or suggest fixes or features to make this appication better - check out the [Contributing Guidelines](./CONTRIBUTING.md)!
+This application uses Expo (React Native) and Firebase.
+
+This application is open-source following the [MIT License](./LICENSE). Feel free to create issues or suggest fixes or features to make this appication better - check out the [Contributing Guidelines](./CONTRIBUTING.md)!
 
 ### Getting Started
 
@@ -62,7 +64,7 @@ Then create a `eas.json` file and include the following:
         "EXPO_PUBLIC_APIKEY": "",
         "EXPO_PUBLIC_AUTHDOMAIN": "",
         "EXPO_PUBLIC_PROJECTID": "",
-        "EXPO_PUBLIC_STORAGEBUCKET": "v",
+        "EXPO_PUBLIC_STORAGEBUCKET": "",
         "EXPO_PUBLIC_MESSAGESENDERID": "",
         "EXPO_PUBLIC_APPID": "",
         "EXPO_PUBLIC_MEASUREMENTID": ""
