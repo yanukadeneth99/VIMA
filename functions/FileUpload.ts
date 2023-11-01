@@ -2,7 +2,12 @@
  * File handling File Uploads into Firebase Storage
  */
 
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import {
+  ref,
+  uploadBytes,
+  getDownloadURL,
+  deleteObject,
+} from "firebase/storage";
 
 import PushAlert from "./Alert";
 import { storage } from "../config/firebase";
@@ -47,4 +52,21 @@ async function uploadImage(uri: string): Promise<string> {
   }
 }
 
-export { uploadImage };
+/**
+ * Function to delete the image
+ * @param {string} uri - The file URI of the image
+ */
+async function deleteImage(uri: string): Promise<void> {
+  try {
+    // Creating a Reference for the image
+    const imageRef = ref(storage, uri);
+
+    // Delete the files
+    await deleteObject(imageRef);
+  } catch (error) {
+    console.error(error);
+    PushAlert("Error", "Error deleting image");
+  }
+}
+
+export { uploadImage, deleteImage };

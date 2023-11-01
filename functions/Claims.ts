@@ -13,6 +13,8 @@ import {
   where,
   Timestamp,
   orderBy,
+  doc,
+  deleteDoc,
 } from "firebase/firestore";
 
 import PushAlert from "./Alert";
@@ -73,6 +75,24 @@ async function createDoc(
     console.error("Error adding document: ", error);
     PushAlert("Error", `${error.code}: ${error.message}`);
     return false;
+  }
+}
+
+/**
+ * Function to delete an existing document in the `Claims` datastore
+ * @param {string} id - The ID of the Document
+ */
+async function deleteDocument(id: string): Promise<void> {
+  try {
+    console.log("Run Delete Doc on: ", id);
+
+    // Delete the document
+    await deleteDoc(doc(db, "Claims", id));
+
+    PushAlert("Success", "Your claim has been deleted");
+  } catch (error) {
+    console.error("Error deleting document: ", error);
+    PushAlert("Error", `${error.code}: ${error.message}`);
   }
 }
 
@@ -140,4 +160,10 @@ function getClaimStatus(num: number): string {
   }
 }
 
-export { createDoc, getClaims, getClaimStatus, getNumPendingClaims };
+export {
+  createDoc,
+  getClaims,
+  getClaimStatus,
+  getNumPendingClaims,
+  deleteDocument,
+};

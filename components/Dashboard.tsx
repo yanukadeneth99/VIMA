@@ -15,10 +15,10 @@ import {
 import React, { useEffect, useState } from "react";
 import { Text, View, ScrollView, Pressable } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { Image } from "expo-image";
 
 import { auth, db } from "../config/firebase";
-import { getClaims, getClaimStatus } from "../functions/Claims";
+import { getClaims } from "../functions/Claims";
+import Claim from "./Claims/Claim";
 
 const Dashboard = () => {
   // States
@@ -85,46 +85,26 @@ const Dashboard = () => {
         <>
           {/* Body */}
           <View className="pb-12 basis-10/12 p-5">
-            {/* TODO: Create a claim component which handles everything internally including loading for images */}
             <ScrollView
-              className="flex flex-col space-y-2 w-11/12"
+              className="flex flex-col space-y-2 w-11/12 "
               showsVerticalScrollIndicator={false}
               showsHorizontalScrollIndicator={false}
             >
-              {docs.length > 1 ? (
+              {docs.length > 0 ? (
                 docs.map((doc) => {
                   return (
                     <View
                       key={doc.id}
                       className="flex flex-col justify-center items-center space-y-2 bg-blue-500/30 w-full rounded-2xl p-3 shadow-md"
                     >
-                      <View className="flex flex-row justify-around items-center w-full">
-                        <Text className="text-gray-800">
-                          {doc.get("car_brand")} - {doc.get("car_model")} ||{" "}
-                          {doc.get("license_plate")}
-                        </Text>
-                        <Text className="uppercase text-blue-700 font-bold">
-                          {getClaimStatus(doc.get("status"))}
-                        </Text>
-                      </View>
-                      <ScrollView horizontal>
-                        <View className="flex flex-row justify-evenly items-center space-x-3">
-                          {/* TODO: Set placeholder to image & Move this to a component */}
-                          {doc.get("imageUploads").map((uri) => {
-                            return (
-                              <Image
-                                key={uri}
-                                source={{
-                                  uri,
-                                }}
-                                className="w-52 h-52"
-                                transition={1000}
-                              />
-                            );
-                          })}
-                        </View>
-                      </ScrollView>
-                      <Text>{doc.get("createdAt").toDate().toString()}</Text>
+                      <Claim
+                        id={doc.id}
+                        key={doc.id}
+                        licensePlate={doc.get("license_plate")}
+                        status={doc.get("status")}
+                        images={doc.get("imageUploads")}
+                        createdAt={doc.get("createdAt")}
+                      />
                     </View>
                   );
                 })
