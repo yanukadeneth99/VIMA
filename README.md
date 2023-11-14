@@ -24,7 +24,7 @@ This application, made as a mockup (test app), is now complete. You can download
 
 ## Demo Video
 
-[![VIMADemoVideo](https://youtu.be/TzCEN0FVQfs)](https://youtu.be/TzCEN0FVQfs)
+[![VIMADemoVideo](https://img.youtube.com/vi/TzCEN0FVQfs/maxresdefault.jpg)](https://youtu.be/TzCEN0FVQfs)
 
 ## Development Information
 
