@@ -104,3 +104,4 @@ Contributions for these fixes or suggestions are highly appreciated. Just to not
 - **Image Editing** - When the images are taken in the create form interface, they cannot be edited or removed. Create a component system to do just that.
 - **Camera not working when Back button is pressed from final submit screen** - You can see this issue on the demo video attached above. Suggestions: Check how the back button is triggered and run the permissions and loading of the camera everytime the component is loaded.
 - **Claims Editing** - Claims that are made cannot be edited, only deleted. Create a component to edit claims.
+- **TODOS** - There are multiple TODOs in this application. You can freely pick one and start working!
