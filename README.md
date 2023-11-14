@@ -6,19 +6,25 @@ VIMA is a mobile and web application that lets users create claims to their insu
 - **Simplicity** - This application interface should be very intuitive and simple so that the process should be easy with minimal information because the user cannot focus on giving loads of information when in an accident. The user can quickly file a claim and focus on the other immediate aspects.
 - **Support** - This app should be supported by most of the common used Android and iOS devices.
 
+You can learn more about the architecture of this application in [this](https://github.com/yanukadeneth99/VIMA/wiki) wiki.
+
 ## Disclaimer
 
 This application is **not** for Emergencies or Health related accidents. If anyone comes across any serious injury, focusing on your health is paramount - insurance can come later.
 
 ## Status
 
-This application is still under development. As of yet, no Production ready version is available.
+This application, made as a mockup (test app), is now complete. You can download the APK for the application for Android [here](https://github.com/yanukadeneth99/VIMA). Please note that there is no Production ready version of this application or never will be. Check below for Contributions.
 
 ## Features
 
 - Create User Authentication
 - Create Claims
 - Camera and Geolocation
+
+## Demo Video
+
+[![VIMADemoVideo](https://youtu.be/TzCEN0FVQfs)](https://youtu.be/TzCEN0FVQfs)
 
 ## Development Information
 
@@ -88,3 +94,13 @@ These are the recommended documentations to follow for this app.
 - [React Navigation](https://reactnavigation.org/docs/tab-based-navigation/)
 - [React Native Reanimated](https://docs.swmansion.com/react-native-reanimated/)
 - [Expo](https://docs.expo.dev/)
+
+### Issues and Suggestions
+
+Contributions for these fixes or suggestions are highly appreciated. Just to note, this application will never get a production version that will be available on stores. Therefore, treat any contributions as a means to learn.
+
+- **Photo issue on iOS** - The app does not work properly on iOS. Suggestions: Check [this file](https://github.com/yanukadeneth99/VIMA/blob/master/functions/FileUpload.ts#L26) out for a fix.
+- **UI Enhancements** - The app uses [Nativewind](https://www.nativewind.dev/) for design. Design consistencies are appreciated to make the elements look like they are from the same app.
+- **Image Editing** - When the images are taken in the create form interface, they cannot be edited or removed. Create a component system to do just that.
+- **Camera not working when Back button is pressed from final submit screen** - You can see this issue on the demo video attached above. Suggestions: Check how the back button is triggered and run the permissions and loading of the camera everytime the component is loaded.
+- **Claims Editing** - Claims that are made cannot be edited, only deleted. Create a component to edit claims.
