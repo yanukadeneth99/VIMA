@@ -14,7 +14,7 @@ This application is **not** for Emergencies or Health related accidents. If anyo
 
 ## Status
 
-This application, made as a mockup (test app), is now complete. You can download the APK for the application for Android [here](https://github.com/yanukadeneth99/VIMA). Please note that there is no Production ready version of this application or never will be. Check below for Contributions.
+This application, made as a mockup (test app), is now complete. You can download the APK for the application for Android [here](https://github.com/yanukadeneth99/VIMA/releases/tag/v1.0). Please note that there is no Production ready version of this application or never will be. Check below for Contributions.
 
 ## Features
 
